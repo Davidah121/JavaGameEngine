@@ -1,0 +1,11 @@
+Object Loading requires that all objects are in the same order.
+If not, Level loading and Savefile Loading will not work properly.
+In order to help with object Loading, all objects are given an ID number.
+The ID number can not be the same as another objects. This will cause an error when they
+are checked by the LevelEditor. The object Id must be assigned by the GameDevs.
+
+There is no save for object loading but instead, a function that will load in all the objects
+to a static ArrayList.
+All Resources should be loaded into a solitary static class so that when using the level editor,
+the resources can be used and assigned easily, and prevent duplication of a single resource.
+This is not necessarily a requirement, but it is better for memory management.

@@ -1,0 +1,12 @@
+handled using strings as well
+objectId = the type of object
+instanceId = the id assigned by the level editor or game dev
+Anything proceeding that is saved by the Game Dev specifically
+objectId and instanceId are required and are the first two items of the line.
+all lines end with ;
+Mostly the same as the level save with the exception of being able to save anytime.
+EX:
+objectId, instanceId, x, y, z, depth, etc.;
+
+BetterEX:
+4,1012,960,480,-32;

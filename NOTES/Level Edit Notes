@@ -1,0 +1,13 @@
+Level Edit Revisions
+
+A system of windows for editing.
+First window is the window where all of the objects can be seen and moved and stuff. (Add/Delete Mode)
+Second window is the information about that object. (Select Mode)
+Third window is the specific information about that object. (Object specific mode)
+Fourth window is the information about the world. (Background, tiles, object amount, terrain)
+Fifth window is the File information. (File Mode)
+
+Extra window used for file loading, texture finding, texture loading, color picker.
+Takes place of first window.
+
+All other windows are on the right and are sub sections of each other separated by tabs.

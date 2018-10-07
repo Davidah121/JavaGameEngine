@@ -1,0 +1,47 @@
+Handled using Strings.
+file name ends in .lvl
+Uses an xml style format or whatever.
+Objects themselves are saved with some information.
+Objects are saved in the order of their object number.
+Instances are saved in the same order. 
+Instances start at 0 and can be set explicitly
+object id is not saved per instance. Instead, it is saved per object.
+
+Format looks kinda like this
+
+The objects can store additional information besides the name and ID.
+The ID is necessary. The name is used to help verify if the object still exists.
+The Level editor will compare the name of the object with what it expects the object to be
+and either change all the names tied to the id or just get rid of them.
+
+<START, ADDITIONAL INFO>
+
+<OBJECT: Object Name, ID, Whatever else>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+
+<OBJECT: Object Name, ID, Whatever else>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+		
+<OBJECT: Object Name, ID, Whatever else>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+	<INSTANCE: InstanceID, x, y, z, xRot, yRot, zRot, xScale, yScale, zScale, visible, persistent>
+		<Extra stuff>
+		
+<END, ADDITIONAL INFO>
+
+The brackets are used to signify the begining and end of a line. The tabs signify the
+hierachy. First is the object, Second is an instance, Third is additional attributes
+for the instance.
