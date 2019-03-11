@@ -1,6 +1,7 @@
 package openGLEngine;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import javafx.application.Platform;
@@ -10,7 +11,7 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 
-public class Sound {
+public class Sound implements Serializable{
 
 	private Media h;
 	private MediaPlayer mp;

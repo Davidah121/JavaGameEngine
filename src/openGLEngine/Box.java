@@ -29,6 +29,20 @@ public class Box extends collisionHull {
 		baseX2 = x2;
 	}
 	
+	public Box(Box other)
+	{
+		super(other);
+		this.y1=other.y1;
+		this.x1=other.x1;
+		this.y2=other.y2;
+		this.x2=other.x2;
+		
+		baseY1 = y1;
+		baseY2 = y2;
+		baseX1 = x1;
+		baseX2 = x2;
+	}
+	
 	/**
 	 * An update function that can be called to change anything about the Axis-Aligned Box.
 	 * This is an empty function inherited from the Parent Class collisionHull.

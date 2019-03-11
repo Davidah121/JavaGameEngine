@@ -2,6 +2,7 @@ package openGLEngine;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
@@ -16,7 +17,7 @@ import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.GL40;
 
-public class Surface {
+public class Surface implements Serializable{
 
 	private int fbo;
 	private int textureID;

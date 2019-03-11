@@ -1,6 +1,8 @@
 package openGLEngine;
 
-public abstract class collisionHull {
+import java.io.Serializable;
+
+public abstract class collisionHull implements Serializable {
 
 	/**
 	 * This class is an abstract class used to define a
@@ -11,6 +13,18 @@ public abstract class collisionHull {
 	protected Vec3f rotationVec = new Vec3f(0,0,0);
 	protected Vec3f scaleVec = new Vec3f(1,1,1);
 	protected Vec3f positionVec = new Vec3f(0,0,0);
+	
+	public collisionHull()
+	{
+		
+	}
+	
+	public collisionHull(collisionHull other)
+	{
+		this.positionVec = other.positionVec;
+		this.scaleVec = other.scaleVec;
+		this.rotationVec = other.rotationVec;
+	}
 	
 	public abstract void updateCollisionHull();
 	public abstract void drawCollisionHull();

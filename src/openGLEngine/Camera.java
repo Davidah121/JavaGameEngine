@@ -1,6 +1,8 @@
 package openGLEngine;
 
-public class Camera {
+import java.io.Serializable;
+
+public class Camera implements Serializable{
 
 	private Vec3f position = new Vec3f(0,0,0);
 	

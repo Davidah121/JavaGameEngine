@@ -43,6 +43,22 @@ public class Line extends collisionHull {
 		updateCollisionHull();
 	}
 	
+	public Line(Line other)
+	{
+		super(other);
+		this.x1=other.x1;
+		this.x2=other.x2;
+		this.y1=other.y1;
+		this.y2=other.y2;
+		
+		baseX1=x1;
+		baseY1=y1;
+		baseX2=x2;
+		baseY2=y2;
+		
+		updateCollisionHull();
+	}
+	
 	/**
 	 * An update function that can be called to change anything about the Line.
 	 * This is an empty function inherited from the Parent Class collisionHull.

@@ -1,7 +1,8 @@
 package openGLEngine;
+import java.io.Serializable;
 import java.lang.Math;
 
-public class Quat4f {
+public class Quat4f implements Serializable{
 
 	public double w = 1;
 	public double x = 0;
@@ -16,6 +17,13 @@ public class Quat4f {
 		this.z = z;
 	}
 	
+	public Quat4f(Quat4f other)
+	{
+		this.w = other.w;
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+	}
 	public double getLength()
 	{
 		return Math.sqrt(w*w + x*x + y*y + z*z);

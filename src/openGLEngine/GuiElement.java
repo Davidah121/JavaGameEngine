@@ -1,9 +1,10 @@
 package openGLEngine;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GuiElement {
+public class GuiElement implements Serializable{
 	
 	private String description = "";
 	public String textField = "";

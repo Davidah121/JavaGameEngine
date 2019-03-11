@@ -1,8 +1,9 @@
 package openGLEngine;
 import java.awt.Point;
+import java.io.Serializable;
 import java.lang.Math;
 
-public class Vec2f {
+public class Vec2f implements Serializable{
 	
 	public double x;
 	public double y;
@@ -23,6 +24,12 @@ public class Vec2f {
 	{
 		x = p.getX();
 		y = p.getY();
+	}
+	
+	public Vec2f(Vec2f other)
+	{
+		x = other.x;
+		y = other.y;
 	}
 	
 	public float[] toFloatArray()

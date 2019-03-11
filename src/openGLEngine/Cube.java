@@ -39,6 +39,25 @@ public class Cube extends collisionHull {
 		baseZ2=z2;
 	}
 	
+	public Cube(Cube o)
+	{
+		super(o);
+		this.x1=o.x1;
+		this.x2=o.x2;
+		this.y1=o.y1;
+		this.y2=o.y2;
+		this.z1=o.z1;
+		this.z2=o.z2;
+		
+		//Set some base values for translating and scaling
+		baseX1=x1;
+		baseY1=y1;
+		baseZ1=z1;
+		
+		baseX2=x2;
+		baseY2=y2;
+		baseZ2=z2;
+	}
 	/**
 	 * An update function that can be called to change anything about the Axis-Aligned Box.
 	 * This is an empty function inherited from the Parent Class collisionHull.

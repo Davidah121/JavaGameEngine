@@ -31,6 +31,8 @@ public class Game {
 	public static Surface currentSurface;
 	
 	private static Surface applicationSurface;
+	private static int renderWidth = Display.getWidth();
+	private static int renderHeight = Display.getHeight();
 	
 	public static Shader currentShader;
 	public static Camera currentCamera = new Camera(Camera.MODE_2D);
@@ -80,6 +82,9 @@ public class Game {
 		
 		Display.createWindow(width, height, title, fullscreen);
 		
+		renderWidth = width;
+		renderHeight = height;
+		
 		start();
 		
 	}
@@ -100,6 +105,9 @@ public class Game {
 		DefaultResources.dispose();
 		
 		currentLevel.dispose();
+		
+		if(controlObject!=null)
+			controlObject.dispose();
 		
 		Sound.terminate();
 		
@@ -134,6 +142,8 @@ public class Game {
 		currentShader.start();
 		
 		set2DBegin();
+		
+		currentShader.setUniform("modelMatrix", false, Mat4f.getIdentityMatrix());
 		
 		int f = currentShader.getUniform("color");
 		GL20.glUniform4f(f, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -344,6 +354,11 @@ public class Game {
 		return viewProjectionMat;
 	}
 	
+	public static void setViewProjectionMatrix(Mat4f t)
+	{
+		viewProjectionMat = t;
+	}
+	
 	/**
 	 * Enables depth testing.
 	 * Sets the games global view projection matrix.
@@ -383,6 +398,16 @@ public class Game {
 	public static Surface getApplicationSurface()
 	{
 		return applicationSurface;
+	}
+	
+	/**
+	 * Creates a orthographic matrix that is best used for drawing GUIs. It is based
+	 * on the display width and height of the game. It has no additional transformations.
+	 * @return
+	 */
+	public static Mat4f getDisplayOrthoMatrix()
+	{
+		return GameMath.createOrthographicMatrix(0, 0, renderWidth, renderHeight);
 	}
 	
 	/**
@@ -450,6 +475,11 @@ public class Game {
 	public static void setControlObject(parentGameObject o)
 	{
 		controlObject = o;
+	}
+	
+	public static parentGameObject getControlObject()
+	{
+		return controlObject;
 	}
 	
 	/**
@@ -640,6 +670,58 @@ public class Game {
 	}
 	
 	/**
+	 * Returns the render width of the game. The render width is what the
+	 * game will render at. This is not necessarily the same as the display
+	 * width. This allows you to render at a lower resolution and up scale 
+	 * for better performance or render at a higher resolution and down scale
+	 * for anti aliasing.
+	 * @return
+	 */
+	public static int getRenderWidth()
+	{
+		return renderWidth;
+	}
+	
+	/**
+	 * Sets the render width of the game. The render width is what the
+	 * game will render at. This is not necessarily the same as the display
+	 * width. This allows you to render at a lower resolution and up scale 
+	 * for better performance or render at a higher resolution and down scale
+	 * for anti aliasing.
+	 * @return
+	 */
+	public static void setRenderWidth(int w)
+	{
+		renderWidth = w;
+	}
+	
+	/**
+	 * Returns the render height of the game. The render height is what the
+	 * game will render at. This is not necessarily the same as the display
+	 * height. This allows you to render at a lower resolution and up scale 
+	 * for better performance or render at a higher resolution and down scale
+	 * for anti aliasing.
+	 * @return
+	 */
+	public static int getRenderHeight()
+	{
+		return renderHeight;
+	}
+	
+	/**
+	 * Sets the render height of the game. The render height is what the
+	 * game will render at. This is not necessarily the same as the display
+	 * height. This allows you to render at a lower resolution and up scale 
+	 * for better performance or render at a higher resolution and down scale
+	 * for anti aliasing.
+	 * @return
+	 */
+	public static void setRenderHeight(int w)
+	{
+		renderHeight = w;
+	}
+	
+	/**
 	 * returns the objectList used by the Game. All Game Objects
 	 * are stored in this. Unsorted by depth.
 	 * @return
@@ -803,8 +885,6 @@ public class Game {
 	 * Destroys an object at the specified location in the Games object
 	 * list. Calls the objects dispose() method before fully removing it
 	 * to avoid memory leaks.
-	 * 
-	 * Fix how this works later. destroyObject called more than once. tabun
 	 * @param index
 	 */
 	public static void destroyObject(int index)

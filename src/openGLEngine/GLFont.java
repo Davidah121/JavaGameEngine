@@ -1,8 +1,9 @@
 package openGLEngine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GLFont {
+public class GLFont implements Serializable{
 
 	private ArrayList<Integer> id = new ArrayList<Integer>();
 	private ArrayList<Float> xPos = new ArrayList<Float>();

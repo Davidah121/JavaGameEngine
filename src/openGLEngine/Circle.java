@@ -24,6 +24,17 @@ public class Circle extends collisionHull {
 		this.radius = radius;
 	}
 	
+	public Circle(Circle other)
+	{
+		super(other);
+		this.x=other.x;
+		this.y=other.y;
+		baseX=x;
+		baseY=y;
+		
+		this.radius = other.radius;
+	}
+	
 	/**
 	 * An update function that can be called to change anything about the Circle.
 	 * This is an empty function inherited from the Parent Class collisionHull.

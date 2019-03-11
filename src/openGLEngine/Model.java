@@ -1,5 +1,6 @@
 package openGLEngine;
 
+import java.io.Serializable;
 import java.nio.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import org.lwjgl.opengl.GL30;
 
 import org.lwjgl.system.MemoryUtil;
 
-public class Model {
+public class Model implements Serializable{
 	
 	private int vaoID;
 	private int vboID;

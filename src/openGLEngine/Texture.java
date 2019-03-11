@@ -3,6 +3,7 @@ package openGLEngine;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -19,7 +20,7 @@ import org.lwjgl.opengl.GL30;
 
 import com.sun.prism.paint.Color;
 
-public class Texture {
+public class Texture implements Serializable{
 
 	private int id;
 	private int width;

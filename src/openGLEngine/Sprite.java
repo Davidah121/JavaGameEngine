@@ -1,8 +1,9 @@
 package openGLEngine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Sprite {
+public class Sprite implements Serializable{
 	
 	private ArrayList<Integer> imageId = new ArrayList<Integer>();
 	

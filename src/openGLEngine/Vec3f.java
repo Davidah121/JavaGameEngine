@@ -1,7 +1,8 @@
 package openGLEngine;
+import java.io.Serializable;
 import java.lang.Math;
 
-public class Vec3f {
+public class Vec3f implements Serializable{
 	
 	public double x;
 	public double y;
@@ -19,6 +20,13 @@ public class Vec3f {
 		this.x=x;
 		this.y=y;
 		this.z=z;
+	}
+	
+	public Vec3f(Vec3f other)
+	{
+		x = other.x;
+		y = other.y;
+		z = other.z;
 	}
 	
 	public float[] toFloatArray()

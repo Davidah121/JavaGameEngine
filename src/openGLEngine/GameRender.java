@@ -53,9 +53,15 @@ public class GameRender extends Game {
 		color.y=g;
 		color.z=b;
 		color.w=a;
-		DefaultResources.defaultShader.setUniform("color", color.toFloatArray());
-		Game.currentShader.setUniform("color", color.toFloatArray());
-		fontShader.setUniform("color", color.toFloatArray());
+		
+		float[] stuff = color.toFloatArray();
+		
+		DefaultResources.defaultShader.setUniform("color", stuff);
+		
+		if(Game.currentShader!=DefaultResources.defaultShader)
+			Game.currentShader.setUniform("color", stuff);
+		
+		fontShader.setUniform("color", stuff);
 		
 	}
 	
@@ -70,9 +76,14 @@ public class GameRender extends Game {
 		GameRender.color.z = color.z;
 		GameRender.color.w = color.w;
 		
-		DefaultResources.defaultShader.setUniform("color", color.toFloatArray());
-		Game.currentShader.setUniform("color", color.toFloatArray());
-		fontShader.setUniform("color", color.toFloatArray());
+		float[] stuff = color.toFloatArray();
+		
+		DefaultResources.defaultShader.setUniform("color", stuff);
+		
+		if(Game.currentShader!=DefaultResources.defaultShader)
+			Game.currentShader.setUniform("color", stuff);
+		
+		fontShader.setUniform("color", stuff);
 		
 	}
 	
@@ -290,6 +301,154 @@ public class GameRender extends Game {
 	public static void drawText(String text, double x, double y)
 	{
 		drawText(text, (float)x, (float)y);
+	}
+	
+	/**
+	 * Draws text at the x and y location on the current rendering surface.
+	 * This method uses the font set by the user in the setFont() method.
+	 * This method also scales the font by the font size specified in the
+	 * setFontSize() method.
+	 * @param text
+	 * @param x
+	 * @param y
+	 */
+	public static void drawText(String text, float x, float y, float xScale, float yScale)
+	{
+		
+		float scaleSize = fontSize / renderFont.getFontSize();
+		
+		float renderX=0;
+		float renderY=0;
+		int index = -1;
+		Texture fontTexture = renderFont.getFontTexture();
+		
+		float u1=0;
+		float u2=0;
+		float v1=0;
+		float v2=0;
+		
+		float x1=0;
+		float x2=0;
+		float y1=0;
+		float y2=0;
+		
+		ArrayList<Float> position = new ArrayList<Float>();
+		ArrayList<Float> texcoord = new ArrayList<Float>();
+		
+		int fontTextureWidth = fontTexture.getWidth();
+		int fontTextureHeight = fontTexture.getHeight();
+		float charXPos, charYPos, charWidth, charHeight;
+		
+		
+		for(int i=0;i<text.length();i++)
+		{
+			index = renderFont.getId(text.charAt(i));
+			//if(text.charAt(i)>=32)
+			//{
+			
+			if(text.charAt(i)==32)
+			{
+				renderX += renderFont.getFontSize()*0.25*xScale;
+			}
+			else
+			{
+				if (index>=0)
+				{
+					charXPos = renderFont.getXPos(index);
+					charYPos = renderFont.getYPos(index);
+					charWidth = renderFont.getWidth(index);
+					charHeight = renderFont.getHeight(index);
+					
+					u1=(charXPos / fontTextureWidth);
+					v1=(charYPos / fontTextureHeight);
+					u2=((charXPos + charWidth) / fontTextureWidth);
+					v2=((charYPos + charHeight) / fontTextureHeight);
+					
+					x1=renderX*scaleSize;
+					y1=renderY*scaleSize;
+					x2=x1+(charWidth*scaleSize)*xScale;
+					y2=y1+(charHeight*scaleSize)*yScale;
+					
+					renderX+=charWidth*xScale;
+					
+					///
+					position.add(x+x1);
+					position.add(y+y1);
+					
+					position.add(x+x1);
+					position.add(y+y2);
+					
+					position.add(x+x2);
+					position.add(y+y2);
+					
+					position.add(x+x2);
+					position.add(y+y1);
+					
+					///
+					texcoord.add(u1);
+					texcoord.add(v1);
+					
+					texcoord.add(u1);
+					texcoord.add(v2);
+					
+					texcoord.add(u2);
+					texcoord.add(v2);
+					
+					texcoord.add(u2);
+					texcoord.add(v1);
+					
+					///
+				}
+			}
+				
+			//}
+			//else
+			//{
+			//	renderX=0;
+			//	renderY+=renderFont.getFontSize();
+			//}
+		}
+		
+		
+		tempModel.setDrawType(GL11.GL_QUADS);
+		
+		tempModel.storeDataFloat(0, position, 2);
+		tempModel.storeDataFloat(1, texcoord, 2);
+		
+		///
+		Shader temp = Game.currentShader;
+		fontShader.start();
+		fontShader.setUniform("size", new int[]{smoothStrength});
+		fontShader.setUniform("pixel", new float[]{1f/GameRender.getFont().getFontTexture().getWidth(), 1f/GameRender.getFont().getFontTexture().getHeight()});
+		fontShader.setProjectionMatrix(Game.getOrthoProjectionMatrix(), false);
+		fontShader.setUniform("color", color.toFloatArray());
+		///
+		
+		fontTexture.bind();
+		
+		tempModel.draw();
+		
+		position.clear();
+		texcoord.clear();
+		
+		fontTexture.unBind();
+		
+		///
+		fontShader.end();
+		temp.start();
+		///
+		
+		tempModel.resetModel();
+	}
+	
+	public static void drawText(String text, int x, int y, int xScale, int yScale)
+	{
+		drawText(text, (float)x, (float)y, (float)xScale, (float)yScale);
+	}
+	
+	public static void drawText(String text, double x, double y, double xScale, double yScale)
+	{
+		drawText(text, (float)x, (float)y, (float)xScale, (float)yScale);
 	}
 	
 	public static void drawTextStretched(String text, float x, float y, float width, float height)
@@ -826,6 +985,9 @@ public class GameRender extends Game {
 		tempModel.storeDataFloat(0, position, 2);
 		tempModel.storeDataFloat(1, texcoords, 2);
 		
+		float[] stuff = new float[]{1f, 1f, 1f, color.getWFloat()};
+		DefaultResources.defaultShader.setUniform("color", stuff);
+		
 		s.bindTexture();
 		int preBlendMode = Game.getBlendMode();
 		Game.setBlending(Game.SURFACE_DRAW);
@@ -836,6 +998,9 @@ public class GameRender extends Game {
 		tempModel.resetModel();
 		position.clear();
 		texcoords.clear();
+		
+		stuff = color.toFloatArray();
+		DefaultResources.defaultShader.setUniform("color", stuff);
 	}
 	
 	public static void drawSurface(Surface s, int x, int y, int xScale, int yScale)
@@ -880,6 +1045,9 @@ public class GameRender extends Game {
 		tempModel.storeDataFloat(0, position, 2);
 		tempModel.storeDataFloat(1, texcoords, 2);
 		
+		float[] stuff = new float[]{1f, 1f, 1f, color.getWFloat()};
+		DefaultResources.defaultShader.setUniform("color", stuff);
+		
 		s.bindTexture();
 		int preBlendMode = Game.getBlendMode();
 		Game.setBlending(Game.SURFACE_DRAW);
@@ -890,6 +1058,9 @@ public class GameRender extends Game {
 		tempModel.resetModel();
 		position.clear();
 		texcoords.clear();
+		
+		stuff = color.toFloatArray();
+		DefaultResources.defaultShader.setUniform("color", stuff);
 	}
 	
 	public static void drawSurfaceExt(Surface s, int x, int y, int width, int height)

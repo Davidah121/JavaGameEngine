@@ -1,21 +1,20 @@
 package openGLEngine;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
-public abstract class parentGameObject implements Cloneable {
+public abstract class parentGameObject implements Serializable{
 	
 	protected double depth = 0;
 	
 	protected Vec3f position = new Vec3f(0,0,0);
 	protected Vec3f rotation = new Vec3f(0,0,0);
+	protected Vec3f scale = new Vec3f(1,1,1);
 	
 	protected Sprite spriteIndex;
 	protected int imageIndex = 0;
 	protected boolean visible = true;
 	protected boolean persistent = false;
-
-	protected Vec3f scale = new Vec3f(1,1,1);
 	
 	protected collisionHull colHull = new Box(-8, -8, 8, 8);
 	
@@ -30,6 +29,31 @@ public abstract class parentGameObject implements Cloneable {
 	
 	public collisionHull levelEditCol = new Box(-8, -8, 8, 8);
 	
+	public double approxArea = 16; //Just the radius of a bounding circle squared. r=4 here
+	
+	public parentGameObject()
+	{
+		
+	}
+	
+	public parentGameObject(parentGameObject o)
+	{
+		depth = o.depth;
+		position = o.position;
+		rotation = o.rotation;
+		scale = o.scale;
+		
+		spriteIndex = o.spriteIndex;
+		imageIndex = o.imageIndex;
+		visible = o.visible;
+		persistent = o.persistent;
+		
+		colHull = o.colHull;
+		
+		updateTime = o.updateTime;
+		renderTime = o.renderTime;
+		
+	}
 	/**
 	 * Returns the name of this object.
 	 * @return String
@@ -73,7 +97,7 @@ public abstract class parentGameObject implements Cloneable {
 	 * or by a level. Also set when the object is loaded.
 	 * @return long
 	 */
-	protected int getId()
+	public int getId()
 	{
 		return this.id;
 	}
@@ -86,7 +110,7 @@ public abstract class parentGameObject implements Cloneable {
 	 * another object in use.
 	 * @param id
 	 */
-	protected void setID(int id)
+	public void setID(int id)
 	{
 		this.id = id;
 	}
@@ -527,5 +551,11 @@ public abstract class parentGameObject implements Cloneable {
 		
 		isAvaliable=false;
 		*/
+	}
+	
+	public parentGameObject copy()
+	{
+		return SystemUtils.copyObject(this);
+		
 	}
 }

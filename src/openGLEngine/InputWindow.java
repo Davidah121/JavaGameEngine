@@ -4,10 +4,16 @@ public abstract class InputWindow extends parentGameObject {
 
 	protected Surface windowSurface;
 	protected boolean active = false;
+	protected boolean alwaysRender = false;
+	
 	protected int x = 0;
 	protected int y = 0;
 	protected int width = 0;
 	protected int height = 0;
+	
+	protected int renderWidth = Game.getRenderWidth();
+	protected int renderHeight = Game.getRenderHeight();
+	
 	private boolean first = false;
 	
 	private int prevX = 0;
@@ -22,7 +28,25 @@ public abstract class InputWindow extends parentGameObject {
 	
 	protected void init()
 	{
-		windowSurface = new Surface(width, height, Surface.COLOR);
+		windowSurface = new Surface(renderWidth, renderHeight, Surface.COLOR_AND_DEPTH, Surface.LINEAR_FILTERING);
+	}
+	
+	/**
+	 * Returns the mouse's x position relative to this windows location and width.
+	 * @return
+	 */
+	public int getMouseXRelative()
+	{
+		return (Input.getMouseX() + x) - width;
+	}
+	
+	/**
+	 * Returns the mouse's y position relative to this windows location and height.
+	 * @return
+	 */
+	public int getMouseYRelative()
+	{
+		return (Input.getMouseY() + y) - height;
 	}
 	
 	public void scaleWindow()
@@ -70,7 +94,7 @@ public abstract class InputWindow extends parentGameObject {
 				}
 			}
 			
-			System.out.println(scaleMode);
+			//System.out.println(scaleMode);
 		}
 		else if(Input.getMouseX() >= x+width-2 && Input.getMouseX() < x+width+6)
 		{
@@ -144,7 +168,7 @@ public abstract class InputWindow extends parentGameObject {
 				int xDis = prevX - Input.getMouseX();
 				int yDis = prevY - Input.getMouseY();
 				
-				System.out.println(xDis);
+				//System.out.println(xDis);
 				switch(scaleMode)
 				{
 				case 1:
@@ -221,6 +245,8 @@ public abstract class InputWindow extends parentGameObject {
 			}
 			
 			
+			scaleWindow();
+			
 			if(Input.getMouseButtonPressed(Input.LEFT_MOUSE_BUTTON))
 			{
 				active = false;
@@ -233,7 +259,11 @@ public abstract class InputWindow extends parentGameObject {
 				}
 			}
 			
-			scaleWindow();
+			if(scaleMode!=0)
+			{
+				active = true;
+			}
+			
 		}
 	}
 	
@@ -253,7 +283,11 @@ public abstract class InputWindow extends parentGameObject {
 				GameRender.setColor(0.0f, 0.3f, 0.3f, 1f);
 				GameRender.drawRect(x-2, y-2, x+width+2, y+height+2, true);
 				
+				windowSurface.bind();
 				render();
+				windowSurface.unBind();
+				
+				GameRender.drawSurfaceExt(windowSurface, x, y, width, height);
 			}
 			else
 			{
@@ -261,13 +295,22 @@ public abstract class InputWindow extends parentGameObject {
 				GameRender.drawRect(x-1, y-1, x+width+1, y+height+1, true);
 				GameRender.setColor(0.3f, 0.3f, 0.3f, 1f);
 				GameRender.drawRect(x-2, y-2, x+width+2, y+height+2, true);
+				
+				if(alwaysRender)
+				{
+					windowSurface.bind();
+					render();
+					windowSurface.unBind();
+					
+					GameRender.drawSurfaceExt(windowSurface, x, y, width, height);
+				}
 			}
-			
-			if(scaleMode!=0)
-			{
-				GameRender.setColor(0.0f, 1.0f, 1.0f, 1f);
-				GameRender.drawRect(tempX, tempY, tempX+tempWidth, tempY+tempHeight, true);
-			}
+		}
+		
+		if(scaleMode!=0)
+		{
+			GameRender.setColor(0.0f, 1.0f, 1.0f, 1f);
+			GameRender.drawRect(tempX, tempY, tempX+tempWidth, tempY+tempHeight, true);
 		}
 	}
 	
@@ -294,6 +337,11 @@ public abstract class InputWindow extends parentGameObject {
 	public boolean getActive()
 	{
 		return active;
+	}
+	
+	public boolean getAlwaysRender()
+	{
+		return alwaysRender;
 	}
 	
 	public Surface getSurface()
@@ -324,6 +372,11 @@ public abstract class InputWindow extends parentGameObject {
 	public void setActive(boolean value)
 	{
 		active = value;
+	}
+	
+	public void setAlwaysRender(boolean value)
+	{
+		alwaysRender = value;
 	}
 	
 	public void setSurface(Surface value)

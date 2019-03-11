@@ -37,6 +37,23 @@ public class Triangle extends collisionHull {
 		baseY3 = y3;
 	}
 	
+	public Triangle(Triangle other)
+	{
+		super(other);
+		x1 = other.x1;
+		y1 = other.y1;
+		x2 = other.x2;
+		y2 = other.y2;
+		x3 = other.x3;
+		y3 = other.y3;
+		
+		baseX1 = x1;
+		baseY1 = y1;
+		baseX2 = x2;
+		baseY2 = y2;
+		baseX3 = x3;
+		baseY3 = y3;
+	}
 	/**
 	 * An update function that can be called to change anything about the Triangle.
 	 * This is an empty function inherited from the Parent Class collisionHull.

@@ -1,10 +1,11 @@
 package openGLEngine;
 
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 
-public class Level {
+public class Level implements Serializable{
 
 	/*
 	 * File System
@@ -20,14 +21,13 @@ public class Level {
 	
 	ArrayList<parentGameObject> objectData = new ArrayList<parentGameObject>();
 	
-	public int width = 640;
-	public int height = 480;
+	private int width = 640;
+	private int height = 480;
 	
-	public String name = "";
-	public String fileName = "";
+	private String name = "";
 	
-	public static ArrayList<Class> types = new ArrayList<Class>();
-	public static ArrayList<String> typeString = new ArrayList<String>();
+	private static ArrayList<Class> types = new ArrayList<Class>();
+	private static ArrayList<String> typeString = new ArrayList<String>();
 	
 	private static long newID = 0;
 	private static long setToID=0;
@@ -39,6 +39,72 @@ public class Level {
 	public Level()
 	{
 		
+	}
+	
+	/**
+	 * Returns the width of the room. The width of the room is just a value
+	 * that can be used by the camera to prevent it from moving past a certain
+	 * point.
+	 * @return
+	 */
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	/**
+	 * Sets the width of the room. The width of the room is just a value
+	 * that can be used by the camera to prevent it from moving past a certain
+	 * point.
+	 * @return
+	 */
+	public void setWidth(int w)
+	{
+		width = w;
+	}
+	
+	/**
+	 * Returns the height of the room. The width of the room is just a value
+	 * that can be used by the camera to prevent it from moving past a certain
+	 * point.
+	 * @return
+	 */
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	/**
+	 * Sets the height of the room. The width of the room is just a value
+	 * that can be used by the camera to prevent it from moving past a certain
+	 * point.
+	 * @return
+	 */
+	public void setHeight(int h)
+	{
+		height = h;
+	}
+	
+	/**
+	 * Returns the name of the room. The name is just an identifier you can use when
+	 * searching for the room. The file name will use this name by default and will
+	 * store it in its file.
+	 * @return
+	 */
+	public String getName()
+	{
+		return name;
+	}
+	
+	/**
+	 * Sets the name of the room. The name is just an identifier you can use when
+	 * searching for the room. The file name will use this name by default and will
+	 * store it in its file.
+	 * @return
+	 */
+	public void setName(String n)
+	{
+		name = n;
 	}
 	
 	public static void verifyClass(Class c)
@@ -123,6 +189,15 @@ public class Level {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets a list of the names of the available objects.
+	 * @return
+	 */
+	public static ArrayList<String> getTypeStringList()
+	{
+		return typeString;
 	}
 	
 	/**
@@ -234,7 +309,7 @@ public class Level {
 		
 		for(int i=0;i<Game.getObjectListSize();i++)
 		{
-			objectData.add( Game.findObject(i));
+			objectData.add( Game.findObject(i).copy());
 		}
 	}
 	
@@ -279,7 +354,6 @@ public class Level {
 		try
 		{
 			quickIO file = new quickIO(fileName+".lvl", quickIO.TYPE_READ);
-			this.fileName = fileName;
 
 			String[] tempString = file.readNextLn().split(",");
 			String otherString = "";
@@ -352,7 +426,7 @@ public class Level {
 		
 		for(int i=0;i<objectData.size();i++)
 		{
-			Game.addObject( objectData.get(i));
+			Game.addObject( objectData.get(i).copy() );
 		}
 		
 		Game.resetID();

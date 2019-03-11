@@ -1877,10 +1877,10 @@ public class GameMath {
 		
 		
 		return new Mat4f( cotValue/ratio, 0.0, 0.0, 0.0,
-					0.0, cotValue, 0.0, 0.0,
-					0.0, 0.0, -zFar/zRange, -1.0,
-					0.0, 0.0, -(2*zFar*zNear)/zRange, 0.0
-				);
+							0.0, cotValue, 0.0, 0.0,
+							0.0, 0.0, -zFar/zRange, -1.0,
+							0.0, 0.0, -(2*zFar*zNear)/zRange, 0.0
+						);
 	}
 	
 	/**
@@ -1977,10 +1977,10 @@ public class GameMath {
 		);
 		
 		Mat4f tempMat2 = new Mat4f(1.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 0.0,
-				x, y, -z, 1.0
-		);
+									0.0, 1.0, 0.0, 0.0,
+									0.0, 0.0, 1.0, 0.0,
+									x, y, -z, 1.0
+								);
 		return matrixMult(tempMat2,tempMat);
 	}
 	
@@ -2021,7 +2021,7 @@ public class GameMath {
 		return new Mat4f(2.0/width, 0.0, 0.0, 0.0,
 						0.0, 2.0/height, 0.0, 0.0,
 						0.0, 0.0, -2/length, 0.0,
-						0.0, 0.0, 0.0, 1.0);
+						-1.0, 1.0, 0.0, 1.0);
 		
 	}
 	

@@ -1,9 +1,18 @@
 package openGLEngine;
 
-public class Mat3f {
+import java.io.Serializable;
+
+public class Mat3f implements Serializable{
 	
 	private double[] matrix = new double[9];
 	
+	static Mat3f getIdentityMatrix()
+	{
+		Mat3f mMat = new Mat3f(1,0,0,
+								0,1,0,
+								0,0,1);
+		return mMat;
+	}
 	/**
 	 * Creates a new Square 3x3 Matrix. The values are initialized
 	 * to 0.
@@ -42,6 +51,14 @@ public class Mat3f {
 		this.matrix[6]=x7;
 		this.matrix[7]=x8;
 		this.matrix[8]=x9;
+	}
+	
+	public Mat3f(Mat3f other)
+	{
+		for(int i=0; i<other.matrix.length; i++)
+		{
+			matrix[i]=other.matrix[i];
+		}
 	}
 	
 	/**

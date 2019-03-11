@@ -1,8 +1,17 @@
 package openGLEngine;
 
-public class Mat2f {
+import java.io.Serializable;
+
+public class Mat2f implements Serializable{
 	
 	private double[] matrix = new double[4];
+	
+	static Mat2f getIdentityMatrix()
+	{
+		Mat2f mMat = new Mat2f(1,0,
+								0,1);
+		return mMat;
+	}
 	
 	/**
 	 * Creates a new Square 2x2 Matrix. The values are initialized
@@ -29,6 +38,14 @@ public class Mat2f {
 		
 		this.matrix[2]=x3;
 		this.matrix[3]=x4;
+	}
+	
+	public Mat2f(Mat2f other)
+	{
+		for(int i=0; i<other.matrix.length; i++)
+		{
+			matrix[i]=other.matrix[i];
+		}
 	}
 	
 	/**

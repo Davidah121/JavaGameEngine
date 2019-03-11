@@ -48,12 +48,14 @@ public class Display {
 	
 	private static double rawFPS=0;
 	private static double FPSCap = 60;
+	private static int VSyncMode = 1;
 	
 	private static double startTime = 0;
 	private static double endTime = 0;
 	
 	private static double deltaTime = 1;
 	private static double rawDeltaTime = 0;
+	private static double totalRawDeltaTime = 0;
 	
 	private static double deltaValue = 0;
 	private static double updateTime = 0;
@@ -63,7 +65,7 @@ public class Display {
 	private static int SystemHeight = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 	private static Vec2f centerPoint = new Vec2f(GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint());
 	
-	private static Vec4f clearColor = new Vec4f(0.5f, 0.5f, 0.5f, 0.0f);
+	private static Vec4f clearColor = new Vec4f(0.5f, 0.5f, 0.5f, 1.0f);
 	
 	private static boolean shouldPrintData = false;
 	
@@ -154,29 +156,53 @@ public class Display {
 		{
 		case -1:
 			FPSCap = 5000;
+			VSyncMode = -1;
 			GLFW.glfwSwapInterval(0);
 			System.out.println("VSYNC SET TO 0");
 			break;
 		case 0:
 			FPSCap = 120;
+			VSyncMode = 0;
 			GLFW.glfwSwapInterval(value);
 			System.out.println("VSYNC SET TO 0");
 			break;
 		case 1:
 			FPSCap = 60;
+			VSyncMode = 1;
 			GLFW.glfwSwapInterval(value);
 			System.out.println("VSYNC SET TO 1");
 			break;
 		case 2:
 			FPSCap = 30;
+			VSyncMode = 2;
 			GLFW.glfwSwapInterval(value);
 			System.out.println("VSYNC SET TO 2");
 			break;
 		default:
 			FPSCap = 120;
+			VSyncMode = 0;
 			GLFW.glfwSwapInterval(0);
 			System.out.println("VSYNC SET TO 0");
 		}
+	}
+	
+	/**
+	 * Returns what vsync mode the game is in.
+	 * 
+	 * If vsync mode is -1: The game has no vsync and the FPSCap is set to 5000
+	 * If vsync mode is 0: The game has no vsync and the FPSCap is set to 120
+	 * If vsync mode is 1: The game has vsync and the FPSCap is set to 60
+	 * If vsync mode is 2: The game has vsync and the FPSCap is set to 30
+	 * 
+	 * This is do to how opengl handles vsync by default. The value really means
+	 * how long to wait to sync with your display. This means that 1 means to match
+	 * your exact refresh rate and 2 means to half it. A 0 just means to not wait for
+	 * your monitor.
+	 * @return
+	 */
+	public static int getVSync()
+	{
+		return VSyncMode;
 	}
 	
 	/**
@@ -272,11 +298,53 @@ public class Display {
 	 * monitor's refresh rate.
 	 * @return
 	 */
-	public static double getRawFPS()
+	public static int getRawFPS()
 	{
-		return rawFPS;
+		return (int)rawFPS;
 	}
 	
+	/**
+	 * This sets the FPS cap for the game. This value is used by the game to control
+	 * the rate at which the game tries to update and render. This in turn means that
+	 * the game is single threaded. This makes sure that the game can process data
+	 * in the order that it is supposed to. This value is also used to find the 
+	 * deltaTime which you can use to account for lowered frame rates.
+	 * 
+	 * This value is altered by the setVSync function and must be altered after the
+	 * function call. This value can be altered anytime during gameplay unlike vsync.
+	 * @param value
+	 */
+	public static void setFPSCap(int value)
+	{
+		FPSCap = value;
+	}
+	
+	/**
+	 * This value is the FPSCap for the game. This value is used by the game to control
+	 * the rate at which the game tries to update and render. This in turn means that
+	 * the game is single threaded. This makes sure that the game can process data
+	 * in the order that it is supposed to. This value is also used to find the 
+	 * deltaTime which you can use to account for lowered frame rates.
+	 * 
+	 * This value is altered by the setVSync function and must be altered after the
+	 * function call. This value can be altered anytime during gameplay unlike vsync.
+	 * @return
+	 */
+	public static int getFPSCap()
+	{
+		return (int) FPSCap;
+	}
+	
+	/**
+	 * This returns a value that allows you to compensate for frame rate differences.
+	 * This can make your game less dependent on your frame rate. This is mostly used
+	 * for movement and some timing.
+	 * @return
+	 */
+	public static double getDeltaValue()
+	{
+		return (deltaTime / (1.0/FPSCap));
+	}
 	/**
 	 * Prints the Update Time, Render Time, and Total Time of
 	 * the current Game Loop. Should be called after the loop has
@@ -359,6 +427,7 @@ public class Display {
 			Input.reset();
 			
 			rawDeltaTime = getTime()-startTime;
+			totalRawDeltaTime+=rawDeltaTime;
 			
 			GLFW.glfwSwapBuffers(Display.getWindow());
 			endTime = getTime();
@@ -375,12 +444,14 @@ public class Display {
 			
 			if (passedTime>=1)
 			{
+				rawFPS = GameMath.floor((1 / totalRawDeltaTime) * FPSCap);
+				totalRawDeltaTime = 0;
 				FPS = FPSCount;
 				FPSCount=0;
 				passedTime=0;
 			}
 			
-			rawFPS = (1.0/rawDeltaTime);
+			//rawFPS = (1.0/rawDeltaTime);
 			
 			if(shouldPrintData==true)
 				printSystemData();

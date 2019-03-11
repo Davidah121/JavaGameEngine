@@ -6,7 +6,7 @@ public class Point extends collisionHull {
 	public double y=0;
 	
 	/**
-	 * Creates a Circle to be used for collision.
+	 * Creates a Point to be used for collision.
 	 * @return void
 	 */
 	public Point(double x, double y)
@@ -15,6 +15,12 @@ public class Point extends collisionHull {
 		this.y = y;
 	}
 	
+	public Point(Point other)
+	{
+		super(other);
+		this.x = other.x;
+		this.y = other.y;
+	}
 	/**
 	 * An update function that can be called to change anything about the Circle.
 	 * This is an empty function inherited from the Parent Class collisionHull.

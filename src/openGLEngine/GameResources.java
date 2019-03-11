@@ -669,7 +669,7 @@ public class GameResources {
 	 * @param s
 	 * @param id
 	 */
-	public static void addResources(Surface s, String id)
+	public static void addResource(Surface s, String id)
 	{
 		if(surfaceId.indexOf(id)==-1)
 		{
@@ -688,7 +688,7 @@ public class GameResources {
 	 * @param s
 	 * @param id
 	 */
-	public static void addResources(Level l, String id)
+	public static void addResource(Level l, String id)
 	{
 		if(levelId.indexOf(id)==-1)
 		{
@@ -707,7 +707,7 @@ public class GameResources {
 	 * @param s
 	 * @param id
 	 */
-	public static void addResources(TileMap t, String id)
+	public static void addResource(TileMap t, String id)
 	{
 		if(tileMapsId.indexOf(id)==-1)
 		{

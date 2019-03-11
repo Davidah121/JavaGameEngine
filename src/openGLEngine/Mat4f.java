@@ -1,9 +1,19 @@
 package openGLEngine;
 
-public class Mat4f {
+import java.io.Serializable;
+
+public class Mat4f implements Serializable{
 	
 	private double[] matrix = new double[16];
 	
+	public static Mat4f getIdentityMatrix()
+	{
+		Mat4f mMat = new Mat4f(1,0,0,0,
+								0,1,0,0,
+								0,0,1,0,
+								0,0,0,1);
+		return mMat;
+	}
 	/**
 	 * Creates a new Square 4x4 Matrix. The values are initialized
 	 * to 0.
@@ -59,6 +69,14 @@ public class Mat4f {
 		this.matrix[14]=x15;
 		this.matrix[15]=x16;
 		
+	}
+	
+	public Mat4f(Mat4f other)
+	{
+		for(int i=0; i<other.matrix.length; i++)
+		{
+			matrix[i]=other.matrix[i];
+		}
 	}
 	
 	/**
