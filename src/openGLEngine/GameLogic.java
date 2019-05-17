@@ -20,162 +20,170 @@ public class GameLogic {
 		}
 	}
 	
-	public static boolean getCollision(parentGameObject o, parentGameObject other)
+	/**
+	 * Finds a collision between the two collision hulls and determines if there
+	 * is a collision. If there is no method to deal with both collision hulls, it
+	 * returns false.
+	 * @param o
+	 * @param other
+	 * @return
+	 */
+	public static boolean getCollision(collisionHull o, collisionHull other)
 	{
 		boolean value = false;
 		
-		if( o.getCollisionHull().getClass().equals(Box.class) )
+		if( o.getClass().equals(Box.class) )
 		{
-			if( other.getCollisionHull().getClass().equals(Box.class) )
+			if( other.getClass().equals(Box.class) )
 			{
 				//Box to Box
-				value = getCollisionAABB((Box) o.getCollisionHull(), (Box) other.getCollisionHull());
+				value = getCollisionAABB((Box) o, (Box) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Circle.class) )
+			else if( other.getClass().equals(Circle.class) )
 			{
 				//Box to Circle
-				value = getCollisionBoxToCircle((Box) o.getCollisionHull(), (Circle) other.getCollisionHull());
+				value = getCollisionBoxToCircle((Box) o, (Circle) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Line.class) )
+			else if( other.getClass().equals(Line.class) )
 			{
 				//Box to Line
-				value = getCollisionBoxToLine((Box) o.getCollisionHull(), (Line) other.getCollisionHull());
+				value = getCollisionBoxToLine((Box) o, (Line) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Point.class) )
+			else if( other.getClass().equals(Point.class) )
 			{
 				//Box to Point
-				value = getCollisionBoxToPoint((Box) o.getCollisionHull(), (Point) other.getCollisionHull());
+				value = getCollisionBoxToPoint((Box) o, (Point) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Triangle.class) )
+			else if( other.getClass().equals(Triangle.class) )
 			{
 				//Box to Triangle
-				value = getCollisionBoxToTriangle((Box) o.getCollisionHull(), (Triangle) other.getCollisionHull());
+				value = getCollisionBoxToTriangle((Box) o, (Triangle) other);
 			}
 			else
 			{
 				System.err.println("Can't find a collision method for the second object.");
 			}
 		}
-		else if( o.getCollisionHull().getClass().equals(Circle.class) )
+		else if( o.getClass().equals(Circle.class) )
 		{
-			if( other.getCollisionHull().getClass().equals(Box.class) )
+			if( other.getClass().equals(Box.class) )
 			{
 				//Circle to Box
-				value = getCollisionBoxToCircle((Box) other.getCollisionHull(), (Circle) o.getCollisionHull());
+				value = getCollisionBoxToCircle((Box) other, (Circle) o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Circle.class) )
+			else if( other.getClass().equals(Circle.class) )
 			{
 				//Circle to Circle
-				value = getCollisionCircleToCircle((Circle) o.getCollisionHull(), (Circle) other.getCollisionHull());
+				value = getCollisionCircleToCircle((Circle) o, (Circle) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Line.class) )
+			else if( other.getClass().equals(Line.class) )
 			{
 				//Circle to Line
 			}
-			else if( other.getCollisionHull().getClass().equals(Point.class) )
+			else if( other.getClass().equals(Point.class) )
 			{
 				//Circle to Point
-				value = getCollisionCircleToPoint( (Circle) o.getCollisionHull(), (Point) other.getCollisionHull());
+				value = getCollisionCircleToPoint( (Circle) o, (Point) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Triangle.class) )
+			else if( other.getClass().equals(Triangle.class) )
 			{
 				//Circle to Triangle
-				value = getCollisionTriangleToCircle( (Triangle) other.getCollisionHull(), (Circle) o.getCollisionHull());
+				value = getCollisionTriangleToCircle( (Triangle) other, (Circle) o);
 			}
 			else
 			{
 				System.err.println("Can't find a collision method for the second object.");
 			}
 		}
-		else if( o.getCollisionHull().getClass().equals(Line.class) )
+		else if( o.getClass().equals(Line.class) )
 		{
-			if( other.getCollisionHull().getClass().equals(Box.class) )
+			if( other.getClass().equals(Box.class) )
 			{
 				//Line to Box
-				value = getCollisionBoxToLine((Box)other.getCollisionHull(), (Line)o.getCollisionHull());
+				value = getCollisionBoxToLine((Box)other, (Line)o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Circle.class) )
+			else if( other.getClass().equals(Circle.class) )
 			{
 				//Line to Circle
 			}
-			else if( other.getCollisionHull().getClass().equals(Line.class) )
+			else if( other.getClass().equals(Line.class) )
 			{
 				//Line to Line
-				value = getCollisionLineToLine((Line) o.getCollisionHull(), (Line) other.getCollisionHull());
+				value = getCollisionLineToLine((Line) o, (Line) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Point.class) )
+			else if( other.getClass().equals(Point.class) )
 			{
 				//Line to Point
-				value = getCollisionLineToPoint((Line) o.getCollisionHull(), (Point) other.getCollisionHull());
+				value = getCollisionLineToPoint((Line) o, (Point) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Triangle.class) )
+			else if( other.getClass().equals(Triangle.class) )
 			{
 				//Line to Triangle
-				value = getCollisionTriangleToLine((Triangle) other.getCollisionHull(), (Line) o.getCollisionHull());
+				value = getCollisionTriangleToLine((Triangle) other, (Line) o);
 			}
 			else
 			{
 				System.err.println("Can't find a collision method for the second object.");
 			}
 		}
-		else if( o.getCollisionHull().getClass().equals(Point.class) )
+		else if( o.getClass().equals(Point.class) )
 		{
-			if( other.getCollisionHull().getClass().equals(Box.class) )
+			if( other.getClass().equals(Box.class) )
 			{
 				//Point to Box
-				value = getCollisionBoxToPoint((Box) other.getCollisionHull(), (Point) o.getCollisionHull());
+				value = getCollisionBoxToPoint((Box) other, (Point) o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Circle.class) )
+			else if( other.getClass().equals(Circle.class) )
 			{
 				//Point to Circle
-				value = getCollisionCircleToPoint((Circle) other.getCollisionHull(), (Point) o.getCollisionHull());
+				value = getCollisionCircleToPoint((Circle) other, (Point) o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Line.class) )
+			else if( other.getClass().equals(Line.class) )
 			{
 				//Point to Line
-				value = getCollisionLineToPoint((Line) other.getCollisionHull(), (Point) o.getCollisionHull());
+				value = getCollisionLineToPoint((Line) other, (Point) o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Point.class) )
+			else if( other.getClass().equals(Point.class) )
 			{
 				//Point to Point
-				value = getCollisionPointToPoint((Point) o.getCollisionHull(), (Point) other.getCollisionHull());
+				value = getCollisionPointToPoint((Point) o, (Point) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Triangle.class) )
+			else if( other.getClass().equals(Triangle.class) )
 			{
 				//Point to Triangle
-				value = getCollisionTriangleToPoint( (Triangle) other.getCollisionHull(), (Point) o.getCollisionHull());
+				value = getCollisionTriangleToPoint( (Triangle) other, (Point) o);
 			}
 			else
 			{
 				System.err.println("Can't find a collision method for the second object.");
 			}
 		}
-		else if( o.getCollisionHull().getClass().equals(Triangle.class) )
+		else if( o.getClass().equals(Triangle.class) )
 		{
-			if( other.getCollisionHull().getClass().equals(Box.class) )
+			if( other.getClass().equals(Box.class) )
 			{
 				//Triangle to Box
-				value = getCollisionBoxToTriangle((Box)other.getCollisionHull(), (Triangle)o.getCollisionHull());
+				value = getCollisionBoxToTriangle((Box)other, (Triangle)o);
 			}
-			else if( other.getCollisionHull().getClass().equals(Circle.class) )
+			else if( other.getClass().equals(Circle.class) )
 			{
 				//Triangle to Circle
-				value = getCollisionTriangleToCircle((Triangle) o.getCollisionHull(), (Circle) other.getCollisionHull());
+				value = getCollisionTriangleToCircle((Triangle) o, (Circle) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Line.class) )
+			else if( other.getClass().equals(Line.class) )
 			{
 				//Triangle to Line
-				value = getCollisionTriangleToLine((Triangle) o.getCollisionHull(), (Line) other.getCollisionHull());
+				value = getCollisionTriangleToLine((Triangle) o, (Line) other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Point.class) )
+			else if( other.getClass().equals(Point.class) )
 			{
 				//Triangle to Point
-				value = getCollisionTriangleToPoint((Triangle)o.getCollisionHull(), (Point)other.getCollisionHull());
+				value = getCollisionTriangleToPoint((Triangle)o, (Point)other);
 			}
-			else if( other.getCollisionHull().getClass().equals(Triangle.class) )
+			else if( other.getClass().equals(Triangle.class) )
 			{
 				//Triangle to Triangle
-				value = getCollisionTriangleToTriangle((Triangle)o.getCollisionHull(), (Triangle)other.getCollisionHull());
+				value = getCollisionTriangleToTriangle((Triangle)o, (Triangle)other);
 			}
 			else
 			{
@@ -188,6 +196,18 @@ public class GameLogic {
 		}
 		
 		return value;
+	}
+	
+	/**
+	 * Determines if there is a collision between the two game objects. It is a wrapper
+	 * around the original getCollision() method and behaves in the same way.
+	 * @param o
+	 * @param other
+	 * @return
+	 */
+	public static boolean getCollision(parentGameObject o, parentGameObject other)
+	{
+		return getCollision(o.getCollisionHull(), other.getCollisionHull());
 	}
 	
 	/**

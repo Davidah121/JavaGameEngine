@@ -3,7 +3,9 @@ package openGLEngine;
 import java.io.*;
 import java.util.*;
 
-public abstract class parentGameObject implements Serializable{
+import glLevelEditor.EntityProcessor;
+
+public abstract class parentGameObject extends Entity implements Serializable {
 	
 	protected double depth = 0;
 	
@@ -21,11 +23,13 @@ public abstract class parentGameObject implements Serializable{
 	private long updateTime = 0;
 	private long renderTime = 0;
 	
-	private int id = Game.getObjectListSize();
+	private int id = -1;
 	
+	/*
 	//Level Edit Stuff
 	public ArrayList<GuiElement> editParts = new ArrayList<GuiElement>();
 	public ArrayList<Integer> editTabs = new ArrayList<Integer>();
+	*/
 	
 	public collisionHull levelEditCol = new Box(-8, -8, 8, 8);
 	
@@ -33,7 +37,7 @@ public abstract class parentGameObject implements Serializable{
 	
 	public parentGameObject()
 	{
-		
+		prepareGuiField();
 	}
 	
 	public parentGameObject(parentGameObject o)
@@ -416,13 +420,161 @@ public abstract class parentGameObject implements Serializable{
 		draw();
 	}
 	
-	/**
-	 * A blank method used to update an object based on the guiElements
-	 * that are tied to this object. Used mainly for level editing.
-	 */
-	public void guiUpdate()
+	public void defaultUpdateItems()
 	{
+		/*
+		protected double depth = 0;
 		
+		protected Vec3f position = new Vec3f(0,0,0);
+		protected Vec3f rotation = new Vec3f(0,0,0);
+		protected Vec3f scale = new Vec3f(1,1,1);
+		
+		protected Sprite spriteIndex;
+		protected int imageIndex = 0;
+		protected boolean visible = true;
+		protected boolean persistent = false;
+		*/
+		
+		//EntityProcessor.processEntity(this);
+		
+		Entity.EntityElement q = this.guiField.get(0);
+		ArrayList<String> values = q.getElements();
+		
+		position.x = GameMath.parseDouble(values.get(0));
+		position.y = GameMath.parseDouble(values.get(1));
+		position.z = GameMath.parseDouble(values.get(2));
+		
+		q = guiField.get(1);
+		values = q.getElements();
+		
+		rotation.x = GameMath.parseDouble(values.get(0));
+		rotation.y = GameMath.parseDouble(values.get(1));
+		rotation.z = GameMath.parseDouble(values.get(2));
+		
+		q = this.guiField.get(2);
+		values = q.getElements();
+		
+		scale.x = GameMath.parseDouble(values.get(0));
+		scale.y = GameMath.parseDouble(values.get(1));
+		scale.z = GameMath.parseDouble(values.get(2));
+		
+		q = this.guiField.get(3);
+		values = q.getElements();
+		
+		depth = GameMath.parseDouble(values.get(0));
+		
+		q = this.guiField.get(4);
+		values = q.getElements();
+		
+		spriteIndex = GameResources.getSprite(values.get(0));
+		
+		q = this.guiField.get(5);
+		values = q.getElements();
+		
+		visible = values.get(0).equalsIgnoreCase("true");
+		
+		q = this.guiField.get(6);
+		values = q.getElements();
+		
+		persistent = values.get(0).equalsIgnoreCase("true");
+		
+	}
+	/**
+	 * A blank method used to change the elements of this object
+	 * Used for level editing
+	 */
+	public void updateItems()
+	{
+		defaultUpdateItems();
+	}
+	
+	public void defaultPrepareGuiField()
+	{
+		Entity.EntityElement Element1 = new Entity.EntityElement("Position", Entity.EntityElement.LIST);
+		Element1.addElement("X");
+		Element1.addElement("Y");
+		Element1.addElement("Z");
+		
+		Entity.EntityElement Element2 = new Entity.EntityElement("Rotation", Entity.EntityElement.LIST);
+		Element2.addElement("X");
+		Element2.addElement("Y");
+		Element2.addElement("Z");
+		
+		Entity.EntityElement Element3 = new Entity.EntityElement("Scale", Entity.EntityElement.LIST);
+		Element3.addElement("X");
+		Element3.addElement("Y");
+		Element3.addElement("Z");
+		
+		Entity.EntityElement Element4 = new Entity.EntityElement("Depth", Entity.EntityElement.SINGLE_ELEMENT);
+		Element4.addElement("");
+		
+		Entity.EntityElement Element5 = new Entity.EntityElement("SpriteName", Entity.EntityElement.SINGLE_ELEMENT);
+		Element5.addElement("");
+		
+		Entity.EntityElement Element6 = new Entity.EntityElement("Visible", Entity.EntityElement.SINGLE_ELEMENT);
+		Element6.addElement("");
+		
+		Entity.EntityElement Element7 = new Entity.EntityElement("Persistent", Entity.EntityElement.SINGLE_ELEMENT);
+		Element7.addElement("");
+		
+		guiField.add(Element1);
+		guiField.add(Element2);
+		guiField.add(Element3);
+		guiField.add(Element4);
+		guiField.add(Element5);
+		guiField.add(Element6);
+		guiField.add(Element7);
+		
+		reloadGuiField();
+	}
+	
+	public void prepareGuiField()
+	{
+		defaultPrepareGuiField();
+	}
+	
+	public void defaultReloadGuiField()
+	{
+		ArrayList<String> stringValues = guiField.get(0).getElements();
+		stringValues.set(0, GameMath.toString(position.x));
+		stringValues.set(1, GameMath.toString(position.y));
+		stringValues.set(2, GameMath.toString(position.z));
+		
+		stringValues = guiField.get(1).getElements();
+		stringValues.set(0, GameMath.toString(rotation.x));
+		stringValues.set(1, GameMath.toString(rotation.y));
+		stringValues.set(2, GameMath.toString(rotation.z));
+		
+		stringValues = guiField.get(2).getElements();
+		stringValues.set(0, GameMath.toString(scale.x));
+		stringValues.set(1, GameMath.toString(scale.y));
+		stringValues.set(2, GameMath.toString(scale.z));
+		
+		stringValues = guiField.get(3).getElements();
+		stringValues.set(0, GameMath.toString(depth));
+		
+		stringValues = guiField.get(4).getElements();
+		stringValues.set(0, GameResources.getSpriteName(spriteIndex));
+		
+		stringValues = guiField.get(5).getElements();
+		stringValues.set(0, GameMath.toString(visible));
+		
+		stringValues = guiField.get(6).getElements();
+		stringValues.set(0, GameMath.toString(persistent));
+	}
+	
+	public void reloadGuiField()
+	{
+		defaultReloadGuiField();
+	}
+	
+	public void clearGuiField()
+	{
+		for(int i=0; i<guiField.size(); i++)
+		{
+			guiField.get(i).clear();
+		}
+		guiField.clear();
 	}
 	
 	/**

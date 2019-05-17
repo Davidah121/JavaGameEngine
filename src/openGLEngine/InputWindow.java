@@ -5,6 +5,9 @@ public abstract class InputWindow extends parentGameObject {
 	protected Surface windowSurface;
 	protected boolean active = false;
 	protected boolean alwaysRender = false;
+	protected boolean alwaysActive = false;
+	protected boolean activeOnMouseClick = false;
+	protected boolean resizable = false;
 	
 	protected int x = 0;
 	protected int y = 0;
@@ -28,7 +31,7 @@ public abstract class InputWindow extends parentGameObject {
 	
 	protected void init()
 	{
-		windowSurface = new Surface(renderWidth, renderHeight, Surface.COLOR_AND_DEPTH, Surface.LINEAR_FILTERING);
+		windowSurface = new Surface(renderWidth, renderHeight, Surface.COLOR, Surface.LINEAR_FILTERING);
 	}
 	
 	/**
@@ -37,7 +40,7 @@ public abstract class InputWindow extends parentGameObject {
 	 */
 	public int getMouseXRelative()
 	{
-		return (Input.getMouseX() + x) - width;
+		return (Input.getMouseX() - x);
 	}
 	
 	/**
@@ -46,7 +49,7 @@ public abstract class InputWindow extends parentGameObject {
 	 */
 	public int getMouseYRelative()
 	{
-		return (Input.getMouseY() + y) - height;
+		return (Input.getMouseY() - y);
 	}
 	
 	public void scaleWindow()
@@ -230,7 +233,7 @@ public abstract class InputWindow extends parentGameObject {
 		
 		if(visible==true)
 		{
-			if(active==true)
+			if(active==true || alwaysActive==true)
 			{
 				thisUpdate();
 				first=true;
@@ -244,10 +247,21 @@ public abstract class InputWindow extends parentGameObject {
 				}
 			}
 			
+			if(resizable)
+				scaleWindow();
 			
-			scaleWindow();
-			
-			if(Input.getMouseButtonPressed(Input.LEFT_MOUSE_BUTTON))
+			if(activeOnMouseClick==false)
+			{
+				active = false;
+				if(Input.getMouseX()>=x && Input.getMouseX()<=x+width)
+				{
+					if(Input.getMouseY()>=y && Input.getMouseY()<=y+height)
+					{
+						active = true;
+					}
+				}
+			}
+			else if(Input.getMouseButtonPressed(Input.LEFT_MOUSE_BUTTON))
 			{
 				active = false;
 				if(Input.getMouseX()>=x && Input.getMouseX()<=x+width)
@@ -276,7 +290,7 @@ public abstract class InputWindow extends parentGameObject {
 		// TODO Auto-generated method stub
 		if(visible==true)
 		{
-			if(active==true)
+			if(active==true || alwaysActive==true)
 			{
 				GameRender.setColor(0.0f, 0.7f, 0.7f, 1f);
 				GameRender.drawRect(x-1, y-1, x+width+1, y+height+1, true);
@@ -284,7 +298,9 @@ public abstract class InputWindow extends parentGameObject {
 				GameRender.drawRect(x-2, y-2, x+width+2, y+height+2, true);
 				
 				windowSurface.bind();
+				
 				render();
+				//GameRender.drawRect(2, 2, 32, 32, true);
 				windowSurface.unBind();
 				
 				GameRender.drawSurfaceExt(windowSurface, x, y, width, height);
@@ -299,7 +315,11 @@ public abstract class InputWindow extends parentGameObject {
 				if(alwaysRender)
 				{
 					windowSurface.bind();
+
+					
 					render();
+					//GameRender.drawRect(2, 2, 32, 32, true);
+					
 					windowSurface.unBind();
 					
 					GameRender.drawSurfaceExt(windowSurface, x, y, width, height);
@@ -344,6 +364,16 @@ public abstract class InputWindow extends parentGameObject {
 		return alwaysRender;
 	}
 	
+	public boolean getAlwaysActive()
+	{
+		return alwaysActive;
+	}
+	
+	public boolean getActiveOnMouseClick()
+	{
+		return activeOnMouseClick;
+	}
+	
 	public Surface getSurface()
 	{
 		return windowSurface;
@@ -377,6 +407,26 @@ public abstract class InputWindow extends parentGameObject {
 	public void setAlwaysRender(boolean value)
 	{
 		alwaysRender = value;
+	}
+	
+	public void setAlwaysActive(boolean value)
+	{
+		alwaysActive = value;
+	}
+	
+	public void setActiveOnMouseClick(boolean value)
+	{
+		activeOnMouseClick = value;
+	}
+	
+	public void setResizable(boolean value)
+	{
+		resizable = value;
+	}
+	
+	public boolean getResizable()
+	{
+		return resizable;
 	}
 	
 	public void setSurface(Surface value)

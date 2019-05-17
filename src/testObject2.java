@@ -6,10 +6,10 @@ public class testObject2 extends parentGameObject {
 	
 	public testObject2()
 	{
-		levelEditCol = new Box(-16,-16,16,16);
-		guiThing();
+		levelEditCol = new Circle(0,0,16);
+		//guiThing();
 	}
-	
+	/*
 	public void guiThing()
 	{
 		editParts.add( GuiElement.createButton(Display.getWidth()-192, 36, Display.getWidth()-160, 52));
@@ -30,7 +30,7 @@ public class testObject2 extends parentGameObject {
 		}
 		
 	}
-	
+	*/
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub

@@ -272,7 +272,7 @@ public class GameRender extends Game {
 		fontShader.start();
 		fontShader.setUniform("size", new int[]{smoothStrength});
 		fontShader.setUniform("pixel", new float[]{1f/GameRender.getFont().getFontTexture().getWidth(), 1f/GameRender.getFont().getFontTexture().getHeight()});
-		fontShader.setProjectionMatrix(Game.getOrthoProjectionMatrix(), false);
+		fontShader.setProjectionMatrix(Game.getViewProjectionMatrix(), false);
 		fontShader.setUniform("color", color.toFloatArray());
 		///
 		
@@ -420,7 +420,7 @@ public class GameRender extends Game {
 		fontShader.start();
 		fontShader.setUniform("size", new int[]{smoothStrength});
 		fontShader.setUniform("pixel", new float[]{1f/GameRender.getFont().getFontTexture().getWidth(), 1f/GameRender.getFont().getFontTexture().getHeight()});
-		fontShader.setProjectionMatrix(Game.getOrthoProjectionMatrix(), false);
+		fontShader.setProjectionMatrix(Game.getViewProjectionMatrix(), false);
 		fontShader.setUniform("color", color.toFloatArray());
 		///
 		
@@ -572,7 +572,7 @@ public class GameRender extends Game {
 		fontShader.start();
 		fontShader.setUniform("size", new int[]{smoothStrength});
 		fontShader.setUniform("pixel", new float[]{1f/GameRender.getFont().getFontTexture().getWidth(), 1f/GameRender.getFont().getFontTexture().getHeight()});
-		fontShader.setProjectionMatrix(Game.getOrthoProjectionMatrix(), false);
+		fontShader.setProjectionMatrix(Game.getViewProjectionMatrix(), false);
 		fontShader.setUniform("color", color.toFloatArray());
 		///
 		
@@ -646,23 +646,23 @@ public class GameRender extends Game {
 		texcoords.add(0f);
 		texcoords.add(0f);
 		
-		position.add(x1);
-		position.add(y2);
-		
-		texcoords.add(0f);
-		texcoords.add(1f);
-		
-		position.add(x2);
-		position.add(y2);
-		
-		texcoords.add(1f);
-		texcoords.add(1f);
-		
 		position.add(x2);
 		position.add(y1);
 		
 		texcoords.add(1f);
 		texcoords.add(0f);
+		
+		position.add(x2);
+		position.add(y2);
+		
+		texcoords.add(1f);
+		texcoords.add(1f);
+		
+		position.add(x1);
+		position.add(y2);
+		
+		texcoords.add(0f);
+		texcoords.add(1f);
 		///
 		
 		tempModel.storeDataFloat(0, position, 2);
@@ -1300,7 +1300,7 @@ public class GameRender extends Game {
 		}
 		
 		tempModel.storeDataFloat(0, position, 2);
-		
+		DefaultResources.defaultTexture.bind();
 		tempModel.draw();
 		
 		tempModel.resetModel();
@@ -1361,7 +1361,7 @@ public class GameRender extends Game {
 		}
 		
 		tempModel.storeDataFloat(0, position, 2);
-		
+		DefaultResources.defaultTexture.bind();
 		tempModel.draw();
 		
 		tempModel.resetModel();
@@ -1399,6 +1399,10 @@ public class GameRender extends Game {
 		{
 			tempModel.setFillType(Model.FILL_TYPE_LINE);
 		}
+		else
+		{
+			tempModel.setFillType(Model.FILL_TYPE_FILL);
+		}
 		
 		position.add(x1); position.add(y1);
 		position.add(x2); position.add(y2);
@@ -1411,8 +1415,6 @@ public class GameRender extends Game {
 		
 		tempModel.resetModel();
 		position.clear();
-		
-		tempModel.setFillType(Model.FILL_TYPE_FILL);
 	}
 	
 	public static void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, boolean outline)

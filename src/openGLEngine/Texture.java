@@ -345,10 +345,6 @@ public class Texture implements Serializable{
 		//GL11.GL_RGBA returns format like this ABGR
 		//GL12.GL_BGRA returns format like this ARGB
 		
-		System.out.println("Saving");
-		System.out.println(file);
-		
-		
 		BufferedImage img = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
 		img.setRGB(0, 0, width, height, pixels, 0, width);
 		

@@ -357,6 +357,8 @@ public class Game {
 	public static void setViewProjectionMatrix(Mat4f t)
 	{
 		viewProjectionMat = t;
+		currentShader.setUniform("projectionMatrix", false, viewProjectionMat);
+		DefaultResources.defaultShader.setProjectionMatrix(viewProjectionMat, false);
 	}
 	
 	/**
@@ -373,6 +375,7 @@ public class Game {
 		viewProjectionMat = GameMath.matrixMult(currentCamera.getViewMat(), projectionMat);
 		
 		currentShader.setUniform("projectionMatrix", false, viewProjectionMat);
+		DefaultResources.defaultShader.setProjectionMatrix(viewProjectionMat, false);
 	}
 	
 	/**
@@ -389,6 +392,7 @@ public class Game {
 		viewProjectionMat = GameMath.matrixMult(currentCamera.getViewMat(), orthoMat);
 		
 		currentShader.setUniform("projectionMatrix", false, viewProjectionMat);
+		DefaultResources.defaultShader.setProjectionMatrix(viewProjectionMat, false);
 	}
 	
 	/**

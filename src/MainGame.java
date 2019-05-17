@@ -1,8 +1,10 @@
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-import glLevelEditor.BasicEditor;
+import glLevelEditor.*;
 import openGLEngine.*;
+import java.util.*;
 
 /*
  * Purpose:
@@ -58,6 +60,11 @@ public class MainGame {
 		System.out.println(pos2.pos.y);
 	}
 	
+	public static void m2(String arg1)
+	{
+		arg1 = "TEST2";
+	}
+	
 	public static void main(String[] args)
 	{
 		
@@ -71,13 +78,22 @@ public class MainGame {
 		
 		//((BasicEditor)Game.getControlObject()).addObject( new testObject() );
 		
-		m();
+		//m();
 		
 		//Game.addObject( new randomObject() );
 		Game.run();
 		
 		Game.end();
 		
+		/*
+		EntityProcessor.processEntity( new randomObject() );
+		RefObject<Integer> a = new RefObject<Integer>(0);
+		RefObject<Integer> b = new RefObject<Integer>(1);
+		
+		System.out.println(a.value+","+b.value);
+		RefObject.swap(a,b);
+		System.out.println(a.value+","+b.value);
+		*/
 	}
 
 }

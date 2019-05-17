@@ -72,11 +72,11 @@ public class Box extends collisionHull {
 	@Override
 	public void translate()
 	{
-		x1+=positionVec.x;
-		y1+=positionVec.y;
+		x1=baseX1+positionVec.x;
+		y1=baseY1+positionVec.y;
 		
-		x2+=positionVec.x;
-		y2+=positionVec.y;
+		x2=baseX2+positionVec.x;
+		y2=baseY2+positionVec.y;
 
 	}
 	

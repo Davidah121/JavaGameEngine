@@ -192,6 +192,17 @@ public class Level implements Serializable{
 	}
 	
 	/**
+	 * Returns the location of the class in the list of classes that can be added
+	 * in any particular level. If the class is not in the list, it returns -1
+	 * @param c
+	 * @return
+	 */
+	public static int getObjectClassID(Class c)
+	{
+		return types.indexOf(c);
+	}
+	
+	/**
 	 * Gets a list of the names of the available objects.
 	 * @return
 	 */
@@ -234,6 +245,8 @@ public class Level implements Serializable{
 	public void addObject(parentGameObject o)
 	{
 		objectData.add(o);
+		o.setID((int)newID);
+		newID+=1;
 	}
 	
 	/**
@@ -287,6 +300,11 @@ public class Level implements Serializable{
 		}
 	}
 	
+	public void deleteObject(parentGameObject o)
+	{
+		objectData.remove(o);
+		o.destroy();
+	}
 	/**
 	 * deletes all objects in this level's object list.
 	 */
@@ -297,6 +315,8 @@ public class Level implements Serializable{
 			objectData.get(i).destroy();
 		}
 		objectData.clear();
+		
+		newID = 0;
 	}
 	
 	/**

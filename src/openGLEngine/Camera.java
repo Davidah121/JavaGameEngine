@@ -11,12 +11,15 @@ public class Camera implements Serializable{
 	
 	private Vec3f rotation = new Vec3f(0,0,0);
 	
+	private double zoomValue = 0;
+	
 	private boolean mode = false;
 	
 	public static final boolean MODE_2D = false;
 	public static final boolean MODE_3D = true;
 	
 	private Mat4f viewMat = GameMath.createViewMatrix(0, 0, 0, 0, 0, 0, mode);
+	private Mat4f scaleMat = Mat4f.getIdentityMatrix();
 	
 	/**
 	 * Creates a Camera to be used by the game. 
@@ -68,7 +71,9 @@ public class Camera implements Serializable{
 	 */
 	public Mat4f getViewProjectionMat()
 	{
-		return GameMath.matrixMult(viewMat, Game.get3DProjectionMatrix() );
+		Mat4f temp = GameMath.matrixMult(scaleMat, viewMat );
+		
+		return GameMath.matrixMult(temp, Game.get3DProjectionMatrix() );
 	}
 	
 	/**
@@ -204,5 +209,21 @@ public class Camera implements Serializable{
 		viewMat = GameMath.createViewMatrix(position.x, position.y, position.z, 
 					rotation.x, rotation.y, rotation.z, mode);
 		
+	}
+	
+	/**
+	 * Sets a value that can be used to create a zoom in effect for the camera.
+	 * Essentially scales the projection
+	 * Work on later
+	 * @param v
+	 */
+	public void setZoom(double v)
+	{
+		zoomValue = v;
+		
+		scaleMat = new Mat4f(v, 0, 0, 0,
+							 0, v, 0, 0,
+							 0, 0, v, 0,
+							 0, 0, 0, 1);
 	}
 }

@@ -6,44 +6,58 @@ import openGLEngine.*;
 
 public class BasicEditor extends parentGameObject {
 	
+	public static BasicEditor controlObject = null;
+	
 	private parentGameObject currentSelectedObject = null;
-	private int currentInstanceID = -1;
-	private int currentObjectID = -1;
 	
-	private int addObjectID = -1;
-	
-	private int mode = -1; //1: add/delete mode, 2: edit mode, 3: tile mode
-	
-	//A unit is arbitrary
-	
-	private int gridXSize = 32; // every 32 units
-	private int gridYSize = 32; // every 32 units
-	private int zoom = 0; //by a whole unit
-	
-	private int gridMaxSize = 128; //128 x 128 grid
-	
-	//Must be 8 units between each grid to be visible
-	//Please note that this does not prevent gridXSize from being 1.
-	private int gridMinSizeDis = 8;
-	
-	private Vec2f tempMousePos = new Vec2f(0,0);
-	private Vec3f tempCamPos = new Vec3f(0,0,0);
-	
-	private int moveSpeed = 1;
+	public testOBJ obj = new testOBJ();
 	
 	private Level myLevel = new Level();
 	
-	private AddDeleteWindow myV = new AddDeleteWindow(8,8,952,540);
-	private GuiWindow myG = new GuiWindow(972, 8, 1274-972, 540);
+	private AddDeleteWindow myBaseWindow = new AddDeleteWindow(8,6,952,538); //944 x 532
+	private EditWindow myEditWindow = new EditWindow(972, 6, 1274-972, 538); //302 x 532
+	private InstanceWindow myListWindow = new InstanceWindow(972, 6, 1274-972, 538); //302 x 532
+	private ObjectWindow myObjectWindow = new ObjectWindow(972, 6, 1274-972, 538); //302 x 532
+	private TabWindow myTabWindow = new TabWindow(972, 550, 1274-972, 716-548); //302 x 164
+	private int activeWindow = 0;
 	
 	public BasicEditor()
 	{
 		//position.x = Display.getWidth()/2;
 		//position.y = Display.getHeight()/2;
-		myV.setLevel(myLevel);
 		
-		myV.setAlwaysRender(true);
-		myG.setAlwaysRender(true);
+		Game.disableCulling();
+		
+		BasicEditor.controlObject = this;
+		
+		myBaseWindow.setLevel(myLevel);
+		myListWindow.setLevel(myLevel);
+		
+		myBaseWindow.setAlwaysRender(true);
+		myEditWindow.setAlwaysRender(true);
+		myListWindow.setAlwaysRender(true);
+		myObjectWindow.setAlwaysRender(true);
+		myTabWindow.setAlwaysRender(true);
+		
+		myEditWindow.setAlwaysActive(true);
+		myListWindow.setAlwaysActive(true);
+		myObjectWindow.setAlwaysActive(true);
+		
+		myBaseWindow.setResizable(false);
+		myEditWindow.setResizable(false);
+		myListWindow.setResizable(false);
+		myObjectWindow.setResizable(false);
+		myTabWindow.setResizable(false);
+	}
+	
+	public AddDeleteWindow getAddDeleteWindow()
+	{
+		return myBaseWindow;
+	}
+	
+	public EditWindow getEditWindow()
+	{
+		return myEditWindow;
 	}
 	
 	public void addObject(parentGameObject t)
@@ -51,147 +65,99 @@ public class BasicEditor extends parentGameObject {
 		myLevel.addObject( t );
 	}
 	
-	public void getObject()
+	public parentGameObject getObject()
 	{
+		return currentSelectedObject;
+	}
+	
+	public void setObject(parentGameObject obj)
+	{
+		this.currentSelectedObject = obj;
+	}
+	
+	public Level getLevel()
+	{
+		return myLevel;
+	}
+	
+	public void setActiveWindow(int i)
+	{
+		activeWindow = i;
+		
+		switch(activeWindow)
+		{
+		case 0:
+			myEditWindow.setActive(true);
+			myEditWindow.update();
+			myEditWindow.setActive(false);
+			break;
+		case 1:
+			myListWindow.setActive(true);
+			myListWindow.update();
+			myListWindow.setActive(false);
+			break;
+		case 2:
+			myObjectWindow.setActive(true);
+			myObjectWindow.update();
+			myObjectWindow.setActive(false);
+			break;
+		default:
+			break;
+		}
 		
 	}
 	
-	private void moveMode()
+	public int getActiveWindow()
 	{
-		if(Input.getMouseButtonPressed(Input.MIDDLE_MOUSE_BUTTON))
-		{
-			tempMousePos.x = Input.getMouseX();
-			tempMousePos.y = Input.getMouseY();
-			tempCamPos.x = position.x;
-			tempCamPos.y = position.y;
-			tempCamPos.z = position.z;
-		}
-		
-		if(Input.getMouseButtonDown(Input.MIDDLE_MOUSE_BUTTON))
-		{
-			position.x = tempCamPos.x + (Input.getMouseX() - tempMousePos.x);
-			position.y = tempCamPos.y + (Input.getMouseY() - tempMousePos.y);
-		}
-		
-		if(Input.getMouseWheelUp())
-		{
-			zoom++;
-			GameWindow.createGridModel(gridXSize, gridYSize, zoom);
-		}
-		else if(Input.getMouseWheelDown())
-		{
-			zoom--;
-			if(zoom<0)
-			{
-				zoom=0;
-			}
-			GameWindow.createGridModel(gridXSize, gridYSize, zoom);
-		}
-		
-		if(Input.getKeyDown(Input.VK_SHIFT))
-		{
-			moveSpeed = 10;
-		}
-		else
-		{
-			moveSpeed = 1;
-		}
-		
-		if(Input.getKeyDown(Input.VK_UP))
-		{
-			position.y+=moveSpeed;
-		}
-		else if(Input.getKeyDown(Input.VK_DOWN))
-		{
-			position.y-=moveSpeed;
-		}
-		if(Input.getKeyDown(Input.VK_LEFT))
-		{
-			position.x+=moveSpeed;
-		}
-		else if(Input.getKeyDown(Input.VK_RIGHT))
-		{
-			position.x-=moveSpeed;
-		}
-	
-	}
-	
-	private void selectMode()
-	{
-		double tempX = Input.getMouseX()-position.x;
-		double tempY = Input.getMouseY()-position.y;
-		
-		currentSelectedObject = null;
-		
-		for(int i=0; i<myLevel.getObjectListSize(); i++)
-		{
-			parentGameObject tempObject = myLevel.getObject(i);
-			
-			double sqrX = GameMath.sqr(tempObject.getPosition().x - tempX);
-			double sqrY = GameMath.sqr(tempObject.getPosition().y - tempY);
-			
-			if(sqrX + sqrY <= tempObject.approxArea)
-			{
-				currentSelectedObject = tempObject;
-				currentInstanceID = tempObject.getId();
-				break;
-			}
-		}
-	}
-	
-	private void addDeleteMode()
-	{
-		Class whatToAdd = Level.getObjectClass(addObjectID);
-		parentGameObject newObject = null;
-		
-		if(whatToAdd!=null)
-		{
-			if(Input.getMouseButtonPressed(Input.LEFT_MOUSE_BUTTON))
-			{
-				try
-				{
-					newObject = (parentGameObject)whatToAdd.newInstance();
-					newObject.setPosition( new Vec3f(position) );
-					Game.addObject(newObject);
-				}
-				catch (Exception e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		if(Input.getMouseButtonPressed(Input.RIGHT_MOUSE_BUTTON))
-		{
-			Game.destroyObject( currentSelectedObject );
-			currentInstanceID = -1;
-			currentSelectedObject = null;
-		}
+		return activeWindow;
 	}
 	
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
 		
-		//moveMode();
-		//
+		//myEditWindow.setEntity(obj);
 		
-		if(mode == 1)
+		//if(myLevel.getObjectListSize()==0)
+		//	myLevel.addObject(obj);
+		
+		if(Input.getMouseButtonPressed(Input.LEFT_MOUSE_BUTTON))
 		{
-			//addDeleteMode();
+			if(Input.getMouseX()>=320 && Input.getMouseX()<=320+64)
+			{
+				if(Input.getMouseY()>=640 && Input.getMouseY()<640+28)
+				{
+					//save
+					save();
+				}
+				else if(Input.getMouseY()>=668 && Input.getMouseY()<668+28)
+				{
+					//load
+					load();
+				}
+			}
 		}
-		else if(mode == 2)
+	}
+	
+	public void save()
+	{
+		String levelName = Game.createInputPopUp("Save File Name");
+		if(!levelName.isEmpty())
 		{
-			//selectMode();
+			myLevel.exportLevel(levelName);
+			myBaseWindow.getSurface().saveImage(levelName+"_Image.png");
+			Game.createAlertPopUp("Created A Level Called: "+levelName);
 		}
-			
-		/*
-		for(int i=0; i<objectList.size(); i++)
+	}
+	
+	public void load()
+	{
+		String levelName = Game.createInputPopUp("Load File Name");
+		if(!levelName.isEmpty())
 		{
-			objectList.get(i).guiUpdate();
+			myLevel.loadExternalLevel(levelName);
+			Game.createAlertPopUp("Loaded A Level Called: "+levelName);
 		}
-		*/
 	}
 	
 	public void drawLevelObjects()
@@ -214,14 +180,59 @@ public class BasicEditor extends parentGameObject {
 		
 		Game.getApplicationSurface().clear();
 		Display.clearWindow();
+		Game.createOrthoProjectionMatrix(0, 0, 1280, 720);
+		Game.setCamera( new Camera(Camera.MODE_2D));
+		Game.set2DBegin();
 		
 		//GameWindow.drawGrid(position, gridXSize, gridYSize, zoom);
 		
-		myV.update();
-		myV.draw();
+		/*
+		obj.reloadGuiField();
+		EntityProcessor.processEntity(obj);
+		EntityProcessor.drawEntityGui(obj);
+		obj.updateItems();
+		*/
 		
-		myG.update();
-		myG.draw();
+		myBaseWindow.update();
+		myBaseWindow.draw();
+		
+		switch(activeWindow)
+		{
+		case 0:
+			myEditWindow.update();
+			myEditWindow.draw();
+			break;
+		case 1:
+			myListWindow.update();
+			myListWindow.draw();
+			break;
+		case 2:
+			myObjectWindow.update();
+			myObjectWindow.draw();
+			break;
+		default:
+			break;
+		}
+		
+		myTabWindow.update();
+		myTabWindow.draw();
+		
+		//GameRender.drawRect(4, 4, 32, 32, true);
+		
+		GameRender.drawText("MOUSE x,y: "+Input.getMouseX()+","+Input.getMouseY(), 0, 640);
+		GameRender.drawText(""+this.myLevel.getObjectListSize(), 0, 668);
+		GameRender.drawText("Save", 320, 640);
+		GameRender.drawText("Load", 320, 668);
+		
+		/*
+		EntityProcessor.offX = 640;
+		EntityProcessor.offY = 0;
+		double xScaleFactor = (double)EntityProcessor.guiSurface.getWidth() / Display.getWidth();
+		double yScaleFactor = (double)EntityProcessor.guiSurface.getHeight() / Display.getHeight();
+		
+		GameRender.setColor(1f, 1f, 1f, 1f);
+		GameRender.drawSurface(EntityProcessor.guiSurface, EntityProcessor.offX*xScaleFactor, EntityProcessor.offY*yScaleFactor, xScaleFactor, yScaleFactor);
+		*/
 		
 		/*
 		for(int i=0; i<objectList.size(); i++)

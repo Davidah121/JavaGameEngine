@@ -13,7 +13,7 @@ public class testObject extends parentGameObject {
 	
 	public testObject()
 	{
-		levelEditCol = new Box(-16,-16,16,16);
+		colHull = new Circle(0, 0, 16);
 	}
 	
 	@Override
@@ -27,6 +27,7 @@ public class testObject extends parentGameObject {
 		// TODO Auto-generated method stub
 		GameRender.setColor(1f, 1f, 1f, 1f);
 		GameRender.drawCircle((int)position.x, (int)position.y, 16, false);
+		colHull.drawCollisionHull();
 	}
 
 }

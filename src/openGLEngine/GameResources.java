@@ -6,7 +6,7 @@ public class GameResources {
 
 	private static ArrayList<String> spriteId = new ArrayList<String>();
 	private static ArrayList<String> soundId = new ArrayList<String>();
-	private static ArrayList<String> modId = new ArrayList<String>();
+	private static ArrayList<String> modelId = new ArrayList<String>();
 	private static ArrayList<String> shaderId = new ArrayList<String>();
 	private static ArrayList<String> textureId = new ArrayList<String>();
 	private static ArrayList<String> fontId = new ArrayList<String>();
@@ -269,6 +269,22 @@ public class GameResources {
 	}
 	
 	/**
+	 * Gets the name of the sound if it has been stored in the list of sounds
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getSoundName(Sound k)
+	{
+		int index = sounds.indexOf(k);
+		if(index>=0)
+		{
+			return soundId.get(index);
+		}
+		return "";
+	}
+	
+	/**
 	 * Gets a Sprite object at the specified location if it exists in the 
 	 * list of Sprites this class holds.
 	 * @param id
@@ -286,6 +302,12 @@ public class GameResources {
 		}
 	}
 	
+	/**
+	 * Gets a Sprite object with the name if it exists in the 
+	 * list of Sprites this class holds.
+	 * @param id
+	 * @return
+	 */
 	public static Sprite getSprite(String id)
 	{
 		try
@@ -297,6 +319,23 @@ public class GameResources {
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets the name of the sprite if it has been stored in the list of sprite
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getSpriteName(Sprite k)
+	{
+		int index = sprites.indexOf(k);
+		if(index>=0)
+		{
+			return spriteId.get(index);
+		}
+		return "";
+	}
+	
 	/**
 	 * Gets a model object with the specified name if it exists in 
 	 * the list of models this class holds.
@@ -307,7 +346,7 @@ public class GameResources {
 	{
 		try
 		{
-			return models.get( modId.indexOf(id) );
+			return models.get( modelId.indexOf(id) );
 		}
 		catch(Exception e)
 		{
@@ -331,6 +370,22 @@ public class GameResources {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets the name of the model if it has been stored in the list of models
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getModelName(Model k)
+	{
+		int index = models.indexOf(k);
+		if(index>=0)
+		{
+			return modelId.get(index);
+		}
+		return "";
 	}
 	
 	/**
@@ -370,6 +425,22 @@ public class GameResources {
 	}
 	
 	/**
+	 * Gets the name of the texture if it has been stored in the list of textures
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getTextureName(Texture k)
+	{
+		int index = textures.indexOf(k);
+		if(index>=0)
+		{
+			return textureId.get(index);
+		}
+		return "";
+	}
+	
+	/**
 	 * Gets a shader with the specified name if it exists in the 
 	 * list of shader this class holds.
 	 * @param id
@@ -403,6 +474,22 @@ public class GameResources {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets the name of the shader if it has been stored in the list of shaders
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getShaderName(Shader k)
+	{
+		int index = shaders.indexOf(k);
+		if(index>=0)
+		{
+			return shaderId.get(index);
+		}
+		return "";
 	}
 	
 	/**
@@ -442,6 +529,22 @@ public class GameResources {
 	}
 	
 	/**
+	 * Gets the name of the font if it has been stored in the list of fonts
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getFontName(GLFont k)
+	{
+		int index = fonts.indexOf(k);
+		if(index>=0)
+		{
+			return fontId.get(index);
+		}
+		return "";
+	}
+	
+	/**
 	 * Gets a surface with the specified name if it exists in the 
 	 * list of surfaces this class holds.
 	 * @param id
@@ -475,6 +578,22 @@ public class GameResources {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets the name of the surface if it has been stored in the list of surfaces
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getSurfaceName(Surface k)
+	{
+		int index = surfaces.indexOf(k);
+		if(index>=0)
+		{
+			return surfaceId.get(index);
+		}
+		return "";
 	}
 	
 	/**
@@ -514,6 +633,22 @@ public class GameResources {
 	}
 	
 	/**
+	 * Gets the name of the level if it has been stored in the list of levels
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getLevelName(Level k)
+	{
+		int index = levels.indexOf(k);
+		if(index>=0)
+		{
+			return levelId.get(index);
+		}
+		return "";
+	}
+	
+	/**
 	 * Gets a tileMap with the specified name if it exists in the 
 	 * list of tileMaps this class holds.
 	 * @param id
@@ -547,6 +682,22 @@ public class GameResources {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets the name of the tileMap if it has been stored in the list of tileMaps
+	 * this class holds.
+	 * @param k
+	 * @return
+	 */
+	public static String getTileMapName(TileMap k)
+	{
+		int index = tileMaps.indexOf(k);
+		if(index>=0)
+		{
+			return tileMapsId.get(index);
+		}
+		return "";
 	}
 	
 	/**
@@ -595,10 +746,10 @@ public class GameResources {
 	 */
 	public static void addResource(Model m, String id)
 	{
-		if(modId.indexOf(id)==-1)
+		if(modelId.indexOf(id)==-1)
 		{
 			models.add(m);
-			modId.add(id);
+			modelId.add(id);
 		}
 		else
 		{
@@ -764,8 +915,8 @@ public class GameResources {
 	{
 		try
 		{
-			models.remove( modId.indexOf(id) ).destroyModel();
-			modId.remove(id);
+			models.remove( modelId.indexOf(id) ).destroyModel();
+			modelId.remove(id);
 		}
 		catch(Exception e)
 		{
@@ -982,7 +1133,7 @@ public class GameResources {
 		
 		soundId.clear();
 		spriteId.clear();
-		modId.clear();
+		modelId.clear();
 		textureId.clear();
 		shaderId.clear();
 		fontId.clear();
